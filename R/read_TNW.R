@@ -13,7 +13,7 @@ read_TNW<-function(dir="D:/data/Lidar/TNW",h=60,what="Speed",stn="TNWA"){
   # heights<-gather(heights,"h","val")
 
   h_opt<-c(4,30,40,60,80,100,120,140,160,180,200,250)
-  names(df_height)<-c("nr","height")
+  # names(df_height)<-c("nr","height")
   h_exists<-h %in% h_opt
   if(h_exists==FALSE){
     message("Height level not included returning FALSE, try 4,30,40,60,80,100,120,140,160,180,200 or 250")
@@ -42,7 +42,7 @@ read_TNW<-function(dir="D:/data/Lidar/TNW",h=60,what="Speed",stn="TNWA"){
 
   if(what=="Speed"){
     I<-df[,grep("^WindSpeed*", colnames(df))]
-    u<-subset(df,select=I)
+    u<-subset(df,select=.data$I)
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -70,7 +70,7 @@ read_TNW<-function(dir="D:/data/Lidar/TNW",h=60,what="Speed",stn="TNWA"){
 
   if(what=="Direction"){
     I<-df[,grep("*WindDir*", colnames(df))]
-    u<-subset(df,select=I)
+    u<-subset(df,select=.data$I)
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 

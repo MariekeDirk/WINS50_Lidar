@@ -22,7 +22,7 @@ read_LEG<-function(dir="D:/data/Lidar/LEG/",h=63,what="Speed"){
 
   if(what=="Speed"){
     I<-df[,grep("*_Ws$*", colnames(df))]
-    u<-subset(df,select=I)
+    u<-subset(df,select=.data$I)
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -43,7 +43,7 @@ read_LEG<-function(dir="D:/data/Lidar/LEG/",h=63,what="Speed"){
 
   if(what=="Direction"){
     I<-df[,grep("*_Wd$", colnames(df))]
-    u<-subset(df,select=I)
+    u<-subset(df,select=.data$I)
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 

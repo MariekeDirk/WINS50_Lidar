@@ -22,7 +22,7 @@ read_EPL<-function(dir="D:/data/Lidar/EPL/",h=63,what="Speed"){
 
   if(what=="Speed"){
     I<-df[,grep("*WsHor_avg$*", colnames(df))]
-    u<-subset(df,select=I)
+    u<-subset(df,select=.data$I)
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -44,7 +44,7 @@ read_EPL<-function(dir="D:/data/Lidar/EPL/",h=63,what="Speed"){
 
   if(what=="Direction"){
     I<-df[,grep("*Wd$", colnames(df))]
-    u<-subset(df,select=I)
+    u<-subset(df,select=.data$I)
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 

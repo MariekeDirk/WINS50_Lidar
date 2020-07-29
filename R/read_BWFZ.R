@@ -24,7 +24,7 @@ read_BWFZ<-function(dir,h=40,what="Speed"){
 
   if(what=="Speed"){
   I<-df[,grep("^WindSpeed.*", colnames(df))]
-  u<-subset(df,select=I)
+  u<-subset(df,select=.data$I)
 
   heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -51,7 +51,7 @@ read_BWFZ<-function(dir,h=40,what="Speed"){
 
   if(what=="Direction"){
     I<-df[,grep("^WindDir.*", colnames(df))]
-    u<-subset(df,select=I)
+    u<-subset(df,select=.data$I)
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 

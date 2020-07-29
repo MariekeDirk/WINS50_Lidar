@@ -30,7 +30,7 @@ read_ANH<-function(dir="D:/data/Lidar/ANH/",h=60,what="Speed"){
 
   if(what=="Speed"){
     I<-df[,grep("*_WindSpeed$*", colnames(df))]
-    u<-subset(df,select=I)
+    u<-subset(df,select=.data$I)
 
     # heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -51,7 +51,7 @@ read_ANH<-function(dir="D:/data/Lidar/ANH/",h=60,what="Speed"){
 
   if(what=="Direction"){
     I<-df[,grep("*_WindDirection$", colnames(df))]
-    u<-subset(df,select=I)
+    u<-subset(df,select=.data$I)
 
     # heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 

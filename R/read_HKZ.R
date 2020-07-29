@@ -41,7 +41,7 @@ read_HKZ<-function(dir="D:/data/Lidar/HKZ",h=60,what="Speed",stn="HKZA"){
 
   if(what=="Speed"){
     I<-df[,grep("*WindSpeed*", colnames(df))]
-    u<-subset(df,select=I)
+    u<-subset(df,select=.data$I)
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -69,7 +69,7 @@ read_HKZ<-function(dir="D:/data/Lidar/HKZ",h=60,what="Speed",stn="HKZA"){
 
   if(what=="Direction"){
     I<-df[,grep("*WindDir*", colnames(df))]
-    u<-subset(df,select=I)
+    u<-subset(df,select=.data$I)
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 

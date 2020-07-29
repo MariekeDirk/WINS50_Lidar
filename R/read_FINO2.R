@@ -4,6 +4,7 @@
 #'@param dir directory of the files (allowed to be stored in subfolders).
 #'@param h height of the measurement (63m,91m,116m,141m,166m,191m,216m,241m,266m,291m).
 #'@param what choose between Speed and Direction. Wind speed as sqrt(u^2+v^2).
+#' @importFrom rlang .data
 #'@author Marieke Dirksen
 #'@export
 read_FINO2<-function(dir="D:/data/Lidar/FINO2/",h=69,what="Speed"){
@@ -14,11 +15,11 @@ read_FINO2<-function(dir="D:/data/Lidar/FINO2/",h=69,what="Speed"){
     return(FALSE)
     }
   fino2<-list.files(dir,pattern="*\\.dat$",recursive = TRUE,full.names = TRUE)
-  df<-do.call("rbind",lapply(fino2,function(x){fread(x)}))
+  df<-do.call("rbind",lapply(fino2,function(x){data.table::fread(x)}))
 
   df$Date<-as.character(df$Date)
   # t.vec<-gsub("[A-Z]"," ",t.vec)
-  df$Date<-as.POSIXct(t.vec,format="%Y%m%d%H%M") #
+  df$Date<-as.POSIXct(.data$t.vec,format="%Y%m%d%H%M") #
 
   if(what=="Speed"){
   df_h<-subset(df,select=c("Date","u","Height"))

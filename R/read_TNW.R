@@ -1,46 +1,47 @@
-#'Read the wind data from HKZ
-#'@description Function to read the wind speed and direction from the HKZ lidar. Data can be
-#'downloaded from \url{https://www.windopzee.net/meet-locaties/hollandse-kust-zuid-hkz/data/}.
+#'Read the wind data from TNW
+#'@description Function to read the wind speed and direction from the TNW lidar. Data can be
+#'downloaded from \url{https://offshorewind.rvo.nl/TNW_WindAndWater}.
 #'@param dir directory of the files (allowed to be stored in subfolders).
-#'@param h height of the measurement (4m,30m,40m,60m,80m,100m,120m,140m,160m,180m,200m).
+#'@param h height of the measurement (4m, 30m ,40m ,60m ,80m ,100m ,120m ,140m ,160m ,180m ,200m ,250m).
 #'@param what choose between Speed and Direction. Wind speed as sqrt(u^2+v^2).
-#'@param stn choose between HKZA and HKZB lidar locations.
-#'@importFrom rlang .data
+#'@param stn choose between TNWA and TNWB lidar locations.
 #'@author Marieke Dirksen
 #'@export
-read_HKZ<-function(dir="D:/data/Lidar/HKZ",h=60,what="Speed",stn="HKZA"){
+read_TNW<-function(dir="D:/data/Lidar/TNW",h=60,what="Speed",stn="TNWA"){
   # I<-df[,grep("*_Altitude$*", colnames(df))]
   # heights<-subset(df,select=I)
   # heights<-gather(heights,"h","val")
 
-  h_opt<-c(4,30,40,60,80,100,120,140,160,180,200)
+  h_opt<-c(4,30,40,60,80,100,120,140,160,180,200,250)
   names(df_height)<-c("nr","height")
   h_exists<-h %in% h_opt
   if(h_exists==FALSE){
-    message("Height level not included returning FALSE, try 4,30,40,60,80,100,120,140,160,180 or 200")
+    message("Height level not included returning FALSE, try 4,30,40,60,80,100,120,140,160,180,200 or 250")
     return(FALSE)
   }
 
-  lidar_opt<-c("HKZA","HKZB")
+  lidar_opt<-c("TNWA","TNWB")
   lid_exists<-stn %in% lidar_opt
   if(lid_exists==FALSE){
-    message("Lidar station name unknown returning FALSE, try HKZA or HKZB")
+    message("Lidar station name unknown returning FALSE, try TNWA or TNWB")
     return(FALSE)
   }
 
-  hkz<-list.files(dir,pattern="*WindResourceSpeedDirectionTIStat_F\\.csv$",
+  tnw<-list.files(dir,pattern="*WindResourceSpeedDirectionStat_F\\.csv$",
                   recursive = TRUE,full.names = TRUE)
-  hkn.I<-hkz[grep(stn,hkz)]
+  tnw.I<-tnw[grep(stn,tnw)]
 
-  df<-do.call("rbind",lapply(.data$hkz.I,function(x){data.table::fread(x)}))
+  #One of the csv files contains an extra column "spLatitude deg"
+  #Used drop to exclude column so all files have the same structure
+  df<-do.call("rbind",lapply(tnw.I,function(x){data.table::fread(x,drop="spLatitude deg")}))
   t.vec<-df$`TIMESTAMP (ISO-8601) UTC`
   t.vec<-gsub("[A-Z]"," ",t.vec)
-  t.vec<-as.POSIXct(t.vec,format="%Y-%m-%d %H:%M:%S ") #
+  t.vec<-as.POSIXct(t.vec,format="%Y-%m-%d %H:%M:%S") #
 
 
 
   if(what=="Speed"){
-    I<-df[,grep("*WindSpeed*", colnames(df))]
+    I<-df[,grep("^WindSpeed*", colnames(df))]
     u<-subset(df,select=I)
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))

@@ -38,12 +38,14 @@ return(df_out)
 #'@param df_h dataframe with columns time an u. time as POSIXct and u as numeric in m/s.
 #'@param n_obs number of observations per day, set to 144 (complete day with 10 minute intervals
 #'which is the standard interval of wind lidar data).
+#'@importFrom magrittr %>%
+#'@importFrom rlang .data
 #'@author Marieke Dirksen
 #'@export
 get_mean_S<-function(df_h,n_obs=144){
-df_h<-df_h[complete.cases(df_h),]
+df_h<-df_h[stats::complete.cases(df_h),]
 df_h$day<-as.Date(df_h$time)
-obs_per_day<-df_h %>% group_by(day) %>% count()
+obs_per_day<-df_h %>% dplyr::group_by(.data$day) %>% dplyr::count()
 
 days_in<-obs_per_day[which(obs_per_day$n==n_obs),]$day
 if(length(days_in)==0){
@@ -74,12 +76,12 @@ df_sub<-df_h[df_h$day %in% days_in,]
 
 SR<-by(df_sub,df_sub$day,FUN=function(x){StructureFunction_NaN(x=x$u)})
 SR<-do.call("rbind",SR)
-SR_mn<-SR %>% group_by(R) %>% summarise(S1=mean(S1,na.rm=TRUE),
-                                        S2=mean(S2,na.rm=TRUE),
-                                        S3=mean(S3,na.rm=TRUE),
-                                        S4=mean(S4,na.rm=TRUE),
-                                        S5=mean(S5,na.rm=TRUE),
-                                        S6=mean(S6,na.rm=TRUE))
+SR_mn<-SR %>% dplyr::group_by(.data$R) %>% dplyr::summarise(S1=mean(.data$S1,na.rm=TRUE),
+                                        S2=mean(.data$S2,na.rm=TRUE),
+                                        S3=mean(.data$S3,na.rm=TRUE),
+                                        S4=mean(.data$S4,na.rm=TRUE),
+                                        S5=mean(.data$S5,na.rm=TRUE),
+                                        S6=mean(.data$S6,na.rm=TRUE))
 return(SR_mn)
 }
 
@@ -92,7 +94,7 @@ return(SR_mn)
 # mat = as.matrix(seq(nvoie,(noct+log2(a0)-1/nvoie)));
 # scales = sweep(mat, 2, vec, `/`)
 # scales[is.infinite(scales)]<-NA
-# scales<-scales[complete.cases(scales),]
+# scales<-scales[stats::complete.cases(scales),]
 # R       = unique(round(2.^scales));
 
 #Just to have more points

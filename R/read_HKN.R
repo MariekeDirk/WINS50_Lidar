@@ -31,7 +31,7 @@ read_HKN<-function(dir="D:/data/Lidar/HKN",h=60,what="Speed",stn="HKNA"){
                   recursive = TRUE,full.names = TRUE)
   hkn.I<-hkn[grep(stn,hkn)]
 
-  df<-do.call("rbind",lapply(hkn.I,function(x){fread(x)}))
+  df<-do.call("rbind",lapply(hkn.I,function(x){data.table::fread(x)}))
   t.vec<-df$`TIMESTAMP (ISO-8601) UTC`
   t.vec<-gsub("[A-Z]"," ",t.vec)
   t.vec<-as.POSIXct(t.vec,format="%Y-%m-%d %H:%M:%S ") #
@@ -62,7 +62,7 @@ read_HKN<-function(dir="D:/data/Lidar/HKN",h=60,what="Speed",stn="HKNA"){
       df_h$h<-h
       names(df_h)<-c("time","u","h")
     }
-    df_h<-df_h[complete.cases(df_h),]
+    df_h<-df_h[stats::complete.cases(df_h),]
     return(df_h)
   }
 
@@ -90,7 +90,7 @@ read_HKN<-function(dir="D:/data/Lidar/HKN",h=60,what="Speed",stn="HKNA"){
       df_h$h<-h
       names(df_h)<-c("time","u","h")
     }
-    df_h<-df_h[complete.cases(df_h),]
+    df_h<-df_h[stats::complete.cases(df_h),]
     return(df_h)
 
   }

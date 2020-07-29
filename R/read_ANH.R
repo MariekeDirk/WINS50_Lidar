@@ -21,7 +21,7 @@ read_ANH<-function(dir="D:/data/Lidar/ANH/",h=60,what="Speed"){
     return(FALSE)
   }
   anh<-list.files(dir,pattern="*\\.csv$",recursive = TRUE,full.names = TRUE)
-  df<-do.call("rbind",lapply(anh,function(x){fread(x)}))
+  df<-do.call("rbind",lapply(anh,function(x){data.table::fread(x)}))
   t.vec<-df$DataTimeStamp
   t.vec<-gsub("[A-Z]"," ",t.vec)
   t.vec<-as.POSIXct(t.vec,format="%Y-%m-%d %H:%M:%OS ") #
@@ -45,7 +45,7 @@ read_ANH<-function(dir="D:/data/Lidar/ANH/",h=60,what="Speed"){
       message("multiple columns selected, returning FALSE")
       return(FALSE)
     }
-    df_h<-df_h[complete.cases(df_h),]
+    df_h<-df_h[stats::complete.cases(df_h),]
     return(df_h)
   }
 
@@ -66,7 +66,7 @@ read_ANH<-function(dir="D:/data/Lidar/ANH/",h=60,what="Speed"){
       message("multiple columns selected, returning FALSE")
       return(FALSE)
     }
-    df_h<-df_h[complete.cases(df_h),]
+    df_h<-df_h[stats::complete.cases(df_h),]
     return(df_h)
 
   }

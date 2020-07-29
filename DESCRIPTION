@@ -8,13 +8,21 @@ Authors@R:
            email = "m.dirksen@tudelft.nl",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
-License: `use_mit_license()`
+License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Imports:
   data.table,
-  stats,
+  dplyr,
+  ggplot2,
+  gridExtra,
   lubridate,
-  ggplot2
+  RColorBrewer,
+  rlang,
+  magrittr,
+  scales,
+  stats
+  
+  

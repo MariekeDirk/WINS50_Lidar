@@ -11,8 +11,10 @@
 #' @param palette color palette to be used
 #' @param countmax NA
 #' @param debug to debug the code
+#' @importFrom rlang .data
+#' @author Marieke Dirksen
 #' @export
-plot.windrose <- function(data,
+plot_windrose <- function(data,
                           spd,
                           dir,
                           spdres = 2,
@@ -56,7 +58,7 @@ plot.windrose <- function(data,
   n.colors.in.range <- n.spd.seq - 1
 
   # create the color map
-  spd.colors <- colorRampPalette(brewer.pal(min(max(3,
+  spd.colors <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(min(max(3,
                                                     n.colors.in.range),
                                                 min(9,
                                                     n.colors.in.range)),
@@ -83,7 +85,7 @@ plot.windrose <- function(data,
                          labels = spd.labels,
                          ordered_result = TRUE)
   # clean up the data
-  data. <- na.omit(data)
+  data. <- stats::na.omit(data)
 
   # figure out the wind direction bins
   dir.breaks <- c(-dirres/2,
@@ -109,33 +111,32 @@ plot.windrose <- function(data,
   }
 
   # deal with change in ordering introduced somewhere around version 2.2
-  if(packageVersion("ggplot2") > "2.2"){
+  if(utils::packageVersion("ggplot2") > "2.2"){
     cat("Hadley broke my code\n")
-    data$spd.binned = with(data, factor(spd.binned, levels = rev(levels(spd.binned))))
+    data$spd.binned = with(data, factor(.data$spd.binned, levels = rev(levels(.data$spd.binned))))
     spd.colors = rev(spd.colors)
   }
 
   # create the plot ----
-  p.windrose <- ggplot(data = data,
-                       aes(x = dir.binned,
-                           fill = spd.binned)) +
-    geom_bar() +
-    theme_bw()+
-    scale_x_discrete(drop = FALSE,
-                     labels = waiver()) +
-    coord_polar(start = -((dirres/2)/360) * 2*pi) +
-    scale_fill_manual(name = "Wind Speed (m/s)",
+  p.windrose <- ggplot2::ggplot(data = data,
+                       ggplot2::aes(x = dir.binned,
+                           fill = .data$spd.binned)) +
+    ggplot2::geom_bar() +
+    ggplot2::theme_bw()+
+    ggplot2::scale_x_discrete(drop = FALSE,
+                     labels = ggplot2::waiver()) +
+    ggplot2::coord_polar(start = -((dirres/2)/360) * 2*pi) +
+    ggplot2::scale_fill_manual(name = "Wind Speed (m/s)",
                       values = spd.colors,
                       drop = FALSE) +
-    #theme_bw() +
-    theme(axis.title.x = element_blank(),
+    ggplot2::theme(axis.title.x = ggplot2::element_blank(),
           #panel.border = element_rect(colour = "blank"),
-          panel.grid.major = element_line(colour="grey65"))
+          panel.grid.major = ggplot2::element_line(colour="grey65"))
 
   # adjust axes if required
   if (!is.na(countmax)){
     p.windrose <- p.windrose +
-      ylim(c(0,countmax))
+      ggplot2::ylim(c(0,countmax))
   }
 
   # print the plot

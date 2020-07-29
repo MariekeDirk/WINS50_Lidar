@@ -17,7 +17,7 @@ read_BWFZ<-function(dir,h=40,what="Speed"){
 
   bwfz<-list.files(dir,pattern="WindResourceSpeedDirectionTIStat",
                    recursive = TRUE,full.names = TRUE)
-  df<-do.call("rbind",lapply(bwfz,fread))
+  df<-do.call("rbind",lapply(bwfz,data.table::fread))
   t.vec<-df$`TIMESTAMP (ISO-8601) UTC`
   t.vec<-gsub("[A-Z]"," ",t.vec)
   t.vec<-as.POSIXct(t.vec,format="%Y-%m-%d %H:%M:%S ") #,

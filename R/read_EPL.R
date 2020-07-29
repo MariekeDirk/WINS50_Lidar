@@ -14,7 +14,7 @@ read_EPL<-function(dir="D:/data/Lidar/EPL/",h=63,what="Speed"){
     return(FALSE)
     }
   epl<-list.files(dir,recursive = TRUE,full.names = TRUE)
-  df<-do.call("rbind",lapply(epl,function(x){fread(x,skip=1)}))
+  df<-do.call("rbind",lapply(epl,function(x){data.table::fread(x,skip=1)}))
   df<-df[-1,]
   t.vec<-df$`Timestamp(UTC)`
   t.vec<-gsub("[A-Z]"," ",t.vec)
@@ -38,7 +38,7 @@ read_EPL<-function(dir="D:/data/Lidar/EPL/",h=63,what="Speed"){
       message("multiple columns selected, returning FALSE")
       return(FALSE)
     }
-    df_h<-df_h[complete.cases(df_h),]
+    df_h<-df_h[stats::complete.cases(df_h),]
   return(df_h)
   }
 
@@ -60,7 +60,7 @@ read_EPL<-function(dir="D:/data/Lidar/EPL/",h=63,what="Speed"){
       message("multiple columns selected, returning FALSE")
       return(FALSE)
     }
-    df_h<-df_h[complete.cases(df_h),]
+    df_h<-df_h[stats::complete.cases(df_h),]
    return(df_h)
 
   }

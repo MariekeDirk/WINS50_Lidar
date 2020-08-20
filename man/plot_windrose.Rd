@@ -5,7 +5,6 @@
 \title{Wind rose plotting routine}
 \usage{
 plot_windrose(
-  data,
   spd,
   dir,
   spdres = 2,
@@ -19,8 +18,6 @@ plot_windrose(
 )
 }
 \arguments{
-\item{data}{input data with column names spd and dir}
-
 \item{spd}{numerical values of the speed}
 
 \item{dir}{direction}

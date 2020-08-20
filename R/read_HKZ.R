@@ -14,7 +14,7 @@ read_HKZ<-function(dir="D:/data/Lidar/HKZ",h=60,what="Speed",stn="HKZA"){
   # heights<-gather(heights,"h","val")
 
   h_opt<-c(4,30,40,60,80,100,120,140,160,180,200)
-  names(df_height)<-c("nr","height")
+  # names(df_height)<-c("nr","height")
   h_exists<-h %in% h_opt
   if(h_exists==FALSE){
     message("Height level not included returning FALSE, try 4,30,40,60,80,100,120,140,160,180 or 200")
@@ -30,9 +30,9 @@ read_HKZ<-function(dir="D:/data/Lidar/HKZ",h=60,what="Speed",stn="HKZA"){
 
   hkz<-list.files(dir,pattern="*WindResourceSpeedDirectionTIStat_F\\.csv$",
                   recursive = TRUE,full.names = TRUE)
-  hkn.I<-hkz[grep(stn,hkz)]
+  hkz.I<-hkz[grep(stn,hkz)]
 
-  df<-do.call("rbind",lapply(.data$hkz.I,function(x){data.table::fread(x)}))
+  df<-do.call("rbind",lapply(hkz.I,function(x){data.table::fread(x)}))
   t.vec<-df$`TIMESTAMP (ISO-8601) UTC`
   t.vec<-gsub("[A-Z]"," ",t.vec)
   t.vec<-as.POSIXct(t.vec,format="%Y-%m-%d %H:%M:%S ") #
@@ -40,8 +40,8 @@ read_HKZ<-function(dir="D:/data/Lidar/HKZ",h=60,what="Speed",stn="HKZA"){
 
 
   if(what=="Speed"){
-    I<-df[,grep("*WindSpeed*", colnames(df))]
-    u<-subset(df,select=.data$I)
+    clmn.I<-df[,grep("*WindSpeed*", colnames(df))]
+    u<-subset(df,select=clmn.I) #.data$
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -69,7 +69,7 @@ read_HKZ<-function(dir="D:/data/Lidar/HKZ",h=60,what="Speed",stn="HKZA"){
 
   if(what=="Direction"){
     I<-df[,grep("*WindDir*", colnames(df))]
-    u<-subset(df,select=.data$I)
+    u<-subset(df,select=I) #.data$
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 

@@ -19,10 +19,17 @@ Imports:
   ggplot2,
   gridExtra,
   lubridate,
+  osmdata,
   RColorBrewer,
+  raster,
+  rgdal,
   rlang,
   magrittr,
   scales,
-  stats
-  
-  
+  sf,
+  sp,
+  stats,
+  usethis,
+  utils
+Depends: 
+    R (>= 2.10)

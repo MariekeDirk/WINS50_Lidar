@@ -4,13 +4,10 @@
 \alias{get_mean_S}
 \title{Get the mean daily structures}
 \usage{
-get_mean_S(df_h, n_obs = 144)
+get_mean_S(df_h)
 }
 \arguments{
 \item{df_h}{dataframe with columns time an u. time as POSIXct and u as numeric in m/s.}
-
-\item{n_obs}{number of observations per day, set to 144 (complete day with 10 minute intervals
-which is the standard interval of wind lidar data).}
 }
 \description{
 Applies the function \link{StructureFunction_NaN} to a dataframe with columns

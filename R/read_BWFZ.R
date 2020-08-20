@@ -6,6 +6,7 @@
 #' @param h measurement height including 4m,30m, 40m, 60m, 80m, 100m, 120m, 140m, 160m, 180m and 200m.
 #' @param what choose between Speed and Direction to get the wind speed (horizontal sqrt(u^2+v^2)) or wind direction.
 #' @author Marieke Dirksen
+#' @importFrom rlang .data
 #' @export
 read_BWFZ<-function(dir,h=40,what="Speed"){
   h_opt<-c(4,30,40,60,80,100,120,140,160,180,200)
@@ -24,7 +25,7 @@ read_BWFZ<-function(dir,h=40,what="Speed"){
 
   if(what=="Speed"){
   I<-df[,grep("^WindSpeed.*", colnames(df))]
-  u<-subset(df,select=.data$I)
+  u<-subset(df,select=I) #.data$
 
   heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -34,6 +35,7 @@ read_BWFZ<-function(dir,h=40,what="Speed"){
   df_h<-cbind(t.vec,hg)
   df_h$h<-h
   names(df_h)<-c("time","u","h")
+  df_h$u<-as.numeric(df_h$u)
   }
 
   if(length(I.h)==2){
@@ -44,6 +46,7 @@ read_BWFZ<-function(dir,h=40,what="Speed"){
     df_h<-cbind(t.vec,hg)
     df_h$h<-h
     names(df_h)<-c("time","u","h")
+    df_h$u<-as.numeric(df_h$u)
   }
   df_h<-df_h[stats::complete.cases(df_h),]
   return(df_h)
@@ -51,7 +54,7 @@ read_BWFZ<-function(dir,h=40,what="Speed"){
 
   if(what=="Direction"){
     I<-df[,grep("^WindDir.*", colnames(df))]
-    u<-subset(df,select=.data$I)
+    u<-subset(df,select=I) #.data$
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -61,6 +64,7 @@ read_BWFZ<-function(dir,h=40,what="Speed"){
       df_h<-cbind(t.vec,hg)
       df_h$h<-h
       names(df_h)<-c("time","dir","h")
+      df_h$dir<-as.numeric(df_h$dir)
     }
     if(length(I.h)==2){
       message("Two columns with this height level, omitting the non-configurable reference height")
@@ -70,7 +74,9 @@ read_BWFZ<-function(dir,h=40,what="Speed"){
       df_h<-cbind(t.vec,hg)
       df_h$h<-h
       names(df_h)<-c("time","dir","h")
+      df_h$dir<-as.numeric(df_h$dir)
     }
+
     df_h<-df_h[stats::complete.cases(df_h),]
     return(df_h)
 

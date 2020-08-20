@@ -3,3 +3,7 @@
 .RData
 .Ruserdata
 inst/
+data/
+R/get_lidar_locations
+R/read_Daarle.R
+

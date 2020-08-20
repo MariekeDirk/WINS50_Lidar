@@ -1,6 +1,5 @@
 #' Wind rose plotting routine
 #' @description Based on ggplot2 plotting routine
-#' @param data input data with column names spd and dir
 #' @param spd numerical values of the speed
 #' @param dir direction
 #' @param spdres slipt number
@@ -14,8 +13,7 @@
 #' @importFrom rlang .data
 #' @author Marieke Dirksen
 #' @export
-plot_windrose <- function(data,
-                          spd,
+plot_windrose <- function(spd,
                           dir,
                           spdres = 2,
                           dirres = 30,
@@ -27,6 +25,10 @@ plot_windrose <- function(data,
                           debug = 0){
 
 
+  if(length(spd)!=length(dir)){
+    message("spd and dir have different lengths, returning FALSE")
+    return(FALSE)
+  }
   # Look to see what data was passed in to the function
   if (is.numeric(spd) & is.numeric(dir)){
     # assume that we've been given vectors of the speed and direction vectors
@@ -34,9 +36,9 @@ plot_windrose <- function(data,
                        dir = dir)
     spd = "spd"
     dir = "dir"
-  } else if (exists("data")){
-    # Assume that we've been given a data frame, and the name of the speed
-    # and direction columns. This is the format we want for later use.
+  } else{
+    message("spd or dir are non numeric input vectors, returning FALSE")
+    return(FALSE)
   }
 
   # Tidy up input data ----
@@ -113,14 +115,14 @@ plot_windrose <- function(data,
   # deal with change in ordering introduced somewhere around version 2.2
   if(utils::packageVersion("ggplot2") > "2.2"){
     cat("Hadley broke my code\n")
-    data$spd.binned = with(data, factor(.data$spd.binned, levels = rev(levels(.data$spd.binned))))
+    data$spd.binned = with(data, factor(spd.binned, levels = rev(levels(spd.binned))))#.data$
     spd.colors = rev(spd.colors)
   }
 
   # create the plot ----
   p.windrose <- ggplot2::ggplot(data = data,
                        ggplot2::aes(x = dir.binned,
-                           fill = .data$spd.binned)) +
+                           fill = spd.binned)) + #.data$
     ggplot2::geom_bar() +
     ggplot2::theme_bw()+
     ggplot2::scale_x_discrete(drop = FALSE,

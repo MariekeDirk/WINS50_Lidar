@@ -9,13 +9,13 @@ read_WMR(dir = "D:/data/Lidar/WMR", h = 60, what = "Speed")
 \arguments{
 \item{dir}{directory of the files (allowed to be stored in subfolders).}
 
-\item{h}{height of the measurement (4m,30m,40m,60m,80m,100m,120m,140m,160m,180m,200m).}
+\item{h}{height of the measurement (4m,30m,40m,60m,80m,100m,120m,140m,160m,180m,200m,290m).}
 
 \item{what}{choose between Speed and Direction. Wind speed as sqrt(u^2+v^2).}
 }
 \description{
 Function to read the wind speed and direction from the WMR lidar. Data can be
-requested from \url{https://offshorewind.rvo.nl/windwaternh}.
+requested from \url{https://orsted.com/en/our-business/offshore-wind/wind-data}.
 }
 \author{
 Marieke Dirksen

@@ -5,6 +5,7 @@
 #'@param h height of the measurement (63m,91m,116m,141m,166m,191m,216m,241m,266m,291m).
 #'@param what choose between Speed and Direction. Wind speed as sqrt(u^2+v^2).
 #'@author Marieke Dirksen
+#' @importFrom rlang .data
 #'@export
 read_LEG<-function(dir="D:/data/Lidar/LEG/",h=63,what="Speed"){
   h_opt<-c(63,91,116,141,166,191,216,241,266,291)
@@ -22,7 +23,7 @@ read_LEG<-function(dir="D:/data/Lidar/LEG/",h=63,what="Speed"){
 
   if(what=="Speed"){
     I<-df[,grep("*_Ws$*", colnames(df))]
-    u<-subset(df,select=.data$I)
+    u<-subset(df,select=I) #.data$
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -43,7 +44,7 @@ read_LEG<-function(dir="D:/data/Lidar/LEG/",h=63,what="Speed"){
 
   if(what=="Direction"){
     I<-df[,grep("*_Wd$", colnames(df))]
-    u<-subset(df,select=.data$I)
+    u<-subset(df,select=I) #.data$
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 

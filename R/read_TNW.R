@@ -6,6 +6,7 @@
 #'@param what choose between Speed and Direction. Wind speed as sqrt(u^2+v^2).
 #'@param stn choose between TNWA and TNWB lidar locations.
 #'@author Marieke Dirksen
+#' @importFrom rlang .data
 #'@export
 read_TNW<-function(dir="D:/data/Lidar/TNW",h=60,what="Speed",stn="TNWA"){
   # I<-df[,grep("*_Altitude$*", colnames(df))]
@@ -42,7 +43,7 @@ read_TNW<-function(dir="D:/data/Lidar/TNW",h=60,what="Speed",stn="TNWA"){
 
   if(what=="Speed"){
     I<-df[,grep("^WindSpeed*", colnames(df))]
-    u<-subset(df,select=.data$I)
+    u<-subset(df,select=I) #.data$
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -70,7 +71,7 @@ read_TNW<-function(dir="D:/data/Lidar/TNW",h=60,what="Speed",stn="TNWA"){
 
   if(what=="Direction"){
     I<-df[,grep("*WindDir*", colnames(df))]
-    u<-subset(df,select=.data$I)
+    u<-subset(df,select=I) #.data$
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 

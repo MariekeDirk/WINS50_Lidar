@@ -4,6 +4,7 @@
 #'@param dir directory of the files (allowed to be stored in subfolders).
 #'@param h height of the measurement (63m,91m,116m,141m,166m,191m,216m,241m,266m,291m).
 #'@param what choose between Speed and Direction. Wind speed as sqrt(u^2+v^2).
+#' @importFrom rlang .data
 #'@author Marieke Dirksen
 #'@export
 read_EPL<-function(dir="D:/data/Lidar/EPL/",h=63,what="Speed"){
@@ -21,8 +22,8 @@ read_EPL<-function(dir="D:/data/Lidar/EPL/",h=63,what="Speed"){
   t.vec<-as.POSIXct(t.vec,format="%Y-%m-%d %H:%M:%OS ") #
 
   if(what=="Speed"){
-    I<-df[,grep("*WsHor_avg$*", colnames(df))]
-    u<-subset(df,select=.data$I)
+    I.clms<-df[,grep("*WsHor_avg$*", colnames(df))]
+    u<-subset(df,select=I.clms) #.data$
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -44,7 +45,7 @@ read_EPL<-function(dir="D:/data/Lidar/EPL/",h=63,what="Speed"){
 
   if(what=="Direction"){
     I<-df[,grep("*Wd$", colnames(df))]
-    u<-subset(df,select=.data$I)
+    u<-subset(df,select=I) #.data$
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 

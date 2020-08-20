@@ -36,23 +36,13 @@ return(df_out)
 #'@description Applies the function \link{StructureFunction_NaN} to a dataframe with columns
 #'time and u. The structures are calculated from normalized u for each complete day.
 #'@param df_h dataframe with columns time an u. time as POSIXct and u as numeric in m/s.
-#'@param n_obs number of observations per day, set to 144 (complete day with 10 minute intervals
-#'which is the standard interval of wind lidar data).
 #'@importFrom magrittr %>%
 #'@importFrom rlang .data
 #'@author Marieke Dirksen
 #'@export
-get_mean_S<-function(df_h,n_obs=144){
-df_h<-df_h[stats::complete.cases(df_h),]
-df_h$day<-as.Date(df_h$time)
-obs_per_day<-df_h %>% dplyr::group_by(.data$day) %>% dplyr::count()
+get_mean_S<-function(df_h){
 
-days_in<-obs_per_day[which(obs_per_day$n==n_obs),]$day
-if(length(days_in)==0){
-  message("No complete days found, returning FALSE")
-  message("Please check if the measurements time-interval equals the standard of 10 minutes")
-  return(FALSE)
-}
+df_sub<-get_complete_days(df_h)
 
 # #subset daytime/nighttime: to be written
 # if(daytime==TRUE){
@@ -72,7 +62,7 @@ if(length(days_in)==0){
 #   # df_sub<-df_h[which(df_h$time>t.start & df_h$time<t.stop),]
 # }
 # SR<-StructureFunction_NaN(x=df_sub$u)
-df_sub<-df_h[df_h$day %in% days_in,]
+
 
 SR<-by(df_sub,df_sub$day,FUN=function(x){StructureFunction_NaN(x=x$u)})
 SR<-do.call("rbind",SR)
@@ -85,6 +75,29 @@ SR_mn<-SR %>% dplyr::group_by(.data$R) %>% dplyr::summarise(S1=mean(.data$S1,na.
 return(SR_mn)
 }
 
+#'Get complete days
+#'@description returns a dataframe with only complete observation days.
+#'@param df_h dataframe with columns time an u. time as POSIXct and u as numeric in m/s.
+#'@param n_obs number of observations per day, set to 144 (complete day with 10 minute intervals
+#'which is the standard interval of wind lidar data).
+#'@author Marieke Dirksen
+#'@importFrom magrittr %>%
+#'@export
+#'
+get_complete_days<-function(df_h,n_obs=144){
+  df_h<-df_h[stats::complete.cases(df_h),]
+  df_h$days<-as.Date(df_h$time)
+  obs_per_day<-df_h %>% dplyr::group_by(days) %>% dplyr::count()
+
+  days_in<-obs_per_day[which(obs_per_day$n==n_obs),]$days
+  if(length(days_in)==0){
+    message("No complete days found, returning FALSE")
+    message("Please check if the measurements time-interval equals the standard of 10 minutes")
+    return(FALSE)
+  }
+  df_sub<-df_h[df_h$days %in% days_in,]
+  return(df_sub)
+}
 
 #Check how the R works in matlab compared to R!
 #noct=8 #put back in function to run this part of the code

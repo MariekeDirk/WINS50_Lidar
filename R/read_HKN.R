@@ -6,6 +6,7 @@
 #'@param what choose between Speed and Direction. Wind speed as sqrt(u^2+v^2).
 #'@param stn choose between HKNA and HKNB lidar locations.
 #'@author Marieke Dirksen
+#' @importFrom rlang .data
 #'@export
 read_HKN<-function(dir="D:/data/Lidar/HKN",h=60,what="Speed",stn="HKNA"){
   # I<-df[,grep("*_Altitude$*", colnames(df))]
@@ -40,7 +41,7 @@ read_HKN<-function(dir="D:/data/Lidar/HKN",h=60,what="Speed",stn="HKNA"){
 
   if(what=="Speed"){
     I<-df[,grep("*WindSpeed*", colnames(df))]
-    u<-subset(df,select=.data$I)
+    u<-subset(df,select=I) #.data$
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 
@@ -68,7 +69,7 @@ read_HKN<-function(dir="D:/data/Lidar/HKN",h=60,what="Speed",stn="HKNA"){
 
   if(what=="Direction"){
     I<-df[,grep("*WindDir*", colnames(df))]
-    u<-subset(df,select=.data$I)
+    u<-subset(df,select=I) #.data$
 
     heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
 

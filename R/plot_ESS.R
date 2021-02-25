@@ -57,6 +57,7 @@ plot_ESS<-function(SR,df,main){
 #'@param SR similarities as output from \link{get_mean_S}.
 #'@param df data input from \link{get_mean_S} to add statistics to the plot.
 #'@param main header of the plot
+#'@param h_levels number of height levels
 #'@author Marieke Dirksen
 #'@importFrom magrittr %>%
 #'@importFrom rlang .data
@@ -84,9 +85,9 @@ plot_ESSh<-function(SR,df,h_levels=11,main){
       lab = paste0("nr.= ",n.obs,"\nmin= ",t.min,"\nmax= ",t.max)
     )
   #order of legend with setkey
-  SR<-data.table(SR)
+  SR<-data.table::data.table(SR)
   SR$h<-as.numeric(SR$h)
-  setkey(SR,"h")
+  data.table::setkey(SR,"h")
 
   p1<-ggplot2::ggplot(SR,ggplot2::aes(.data$S3,.data$S2,color=as.factor(h)))+  #ggtitle(main)+
     ggplot2::geom_point()+

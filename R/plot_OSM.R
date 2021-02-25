@@ -8,14 +8,14 @@
 #' @export
 plot_OSM_wind_meels<-function(update_farms=FALSE){
 work_dir<-"D:/data/WindFarms_shapes/EMODnet_HA_WindFarms_20200305/"
-farms<-st_read(paste0(work_dir,"EMODnet_HA_WindFarms_pg_20200305.shp"))
+farms<-sf::st_read(paste0(work_dir,"EMODnet_HA_WindFarms_pg_20200305.shp"))
 
-countries<-rgdal::readOGR(dsn="D:/natural_earth/ne_10m_admin_0_countries",layer="ne_10m_admin_0_countries")
+countries<-rgdal::readOGR(dsn="D:/data/natural_earth/ne_10m_admin_0_countries",layer="ne_10m_admin_0_countries")
 countries<-sp::spTransform(countries,sp::CRS("+init=epsg:4326"))
 europe<-countries[countries$CONTINENT == "Europe",]
 europe_sf<-sf::st_as_sf(europe)
 
-bord<-rgdal::readOGR(dsn="D:/natural_earth/ne_10m_lakes",layer="ne_10m_lakes")
+bord<-rgdal::readOGR(dsn="D:/data/natural_earth/ne_10m_lakes",layer="ne_10m_lakes")
 bord<-sp::spTransform(bord,sp::CRS("+init=epsg:4326"))
 nl_sf<-sf::st_as_sf(bord)
 

@@ -6,6 +6,7 @@
 #'@author Marieke Dirksen
 #'@importFrom magrittr %>%
 #'@importFrom rlang .data
+#'@importFrom stats lm
 #'@export
 plot_RS<-function(SR,df,main){
   #subset only the days which are used in the ESS analysis
@@ -129,7 +130,7 @@ plot_RS<-function(SR,df,main){
 #'@param SR similarities as output from \link{get_mean_S}.
 #'@param df data input from \link{get_mean_S} to add statistics to the plot.
 #'@param main header of the plot
-#'@param h_level number of individual height levels, expects SR to have a seperate column with h
+#'@param h_levels number of individual height levels, expects SR to have a seperate column with h
 #'@author Marieke Dirksen
 #'@importFrom magrittr %>%
 #'@importFrom rlang .data

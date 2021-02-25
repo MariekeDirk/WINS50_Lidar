@@ -5,6 +5,7 @@
 #'@param h height of the measurement (4m,30m,40m,60m,80m,100m,120m,140m,160m,180m,200m,290m).
 #'@param what choose between Speed and Direction. Wind speed as sqrt(u^2+v^2).
 #'@importFrom rlang .data
+#'@importFrom stats complete.cases
 #'@author Marieke Dirksen
 #'@export
 read_WMR<-function(dir="D:/data/Lidar/WMR",h=60,what="Speed"){

@@ -23,7 +23,7 @@ For September 2019: 60m,84m,109m,118m,140m,165m,191m,202m,225m,245m or 295m.}
 
 \item{stn}{The stations of Steven (function not included in online version), stn name is Borssele_Alpha.}
 
-\item{period}{JA2019 for July and August 2019 or S for September 2019.}
+\item{period}{JA2019 for July and August 2019 or S2019 for September 2019.}
 }
 \description{
 Function to read the wind speed and direction from the Borselle Alpha lidar.

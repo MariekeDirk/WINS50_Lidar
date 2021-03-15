@@ -1,49 +1,42 @@
-#'Read the wind data from HKN
-#'@description Function to read the wind speed and direction from the HKN lidar. Data can be
-#'requested from \url{https://offshorewind.rvo.nl/windwaternh}.
+#'Read the wind data from HKW
+#'@description Function to read the wind speed and direction from the HKZ lidar. Data can be
+#'downloaded from \url{https://www.windopzee.net/meet-locaties/hollandse-kust-zuid-hkz/data/}.
 #'@param dir directory of the files (allowed to be stored in subfolders).
-#'@param h height of the measurement (4m,30m,40m,60m,80m,100m,120m,140m,160m,180m,200m).
+#'@param h height of the measurement (63m,91m,116m,141m,166m,191m,216m,241m,266m,291m).
 #'@param what choose between Speed and Direction. Wind speed as sqrt(u^2+v^2).
-#'@param stn choose between HKNA and HKNB lidar locations.
+#'@importFrom rlang .data
 #'@author Marieke Dirksen
-#' @importFrom rlang .data
 #'@export
-read_HKN<-function(dir="D:/data/Lidar/HKN",h=60,what="Speed",stn="HKNA"){
+read_K13A<-function(dir="D:/data/Lidar/K13/",h=60,what="Speed"){
   # I<-df[,grep("*_Altitude$*", colnames(df))]
   # heights<-subset(df,select=I)
   # heights<-gather(heights,"h","val")
 
-  h_opt<-c(4,30,40,60,80,100,120,140,160,180,200)
+  h_opt<-c(63,91,116,141,166,191,216,241,266,291)
   # names(df_height)<-c("nr","height")
   h_exists<-h %in% h_opt
   if(h_exists==FALSE){
-    message("Height level not included returning FALSE, try 4,30,40,60,80,100,120,140,160,180 or 200")
+    message("Height level not included returning FALSE, try 63,91,116,141,166,191,216,241,266 or 291")
     return(FALSE)
   }
 
-  lidar_opt<-c("HKNA","HKNB")
-  lid_exists<-stn %in% lidar_opt
-  if(lid_exists==FALSE){
-    message("Lidar station name unknown returning FALSE, try HKNA or HKNB")
-    return(FALSE)
-  }
-
-  hkn<-list.files(dir,pattern="*WindResourceSpeedDirectionTIStat_F\\.csv$",
+  hkz<-list.files(dir,pattern="*K13*",
                   recursive = TRUE,full.names = TRUE)
-  hkn.I<-hkn[grep(stn,hkn)]
+  df<-do.call("rbind",lapply(hkz,function(x){data.table::fread(x,skip=1,header=TRUE)}))
+  df<-df[-1,]
 
-  df<-do.call("rbind",lapply(hkn.I,function(x){data.table::fread(x)}))
-  t.vec<-df$`TIMESTAMP (ISO-8601) UTC`
+  t.vec<-df$`Timestamp(UTC)`
   t.vec<-gsub("[A-Z]"," ",t.vec)
   t.vec<-as.POSIXct(t.vec,format="%Y-%m-%d %H:%M:%S ") #
 
 
 
   if(what=="Speed"){
-    I<-df[,grep("*WindSpeed*", colnames(df))]
-    u<-subset(df,select=I) #.data$
+    clmn.I<-df[,grep("*WsHor_avg$*", colnames(df))]
+    u<-subset(df,select=clmn.I) #.data$
 
-    heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
+    heights<-gsub("K13A_H","",names(u))
+    heights<-as.numeric(gsub("[^0-9.-]", "", heights))
 
     I.h<-which(heights==h)
     if(length(I.h)==1){
@@ -68,10 +61,11 @@ read_HKN<-function(dir="D:/data/Lidar/HKN",h=60,what="Speed",stn="HKNA"){
   }
 
   if(what=="Direction"){
-    I<-df[,grep("*WindDir*", colnames(df))]
+    I<-df[,grep("*_Wd$", colnames(df))]
     u<-subset(df,select=I) #.data$
 
-    heights<-as.numeric(gsub("[^0-9.-]", "", names(u)))
+    heights<-gsub("K13A_H","",names(u))
+    heights<-as.numeric(gsub("[^0-9.-]", "", heights))
 
     I.h<-which(heights==h)
     if(length(I.h)==1){
@@ -84,12 +78,12 @@ read_HKN<-function(dir="D:/data/Lidar/HKN",h=60,what="Speed",stn="HKNA"){
 
     if(length(I.h)==2){
       message("Two columns with this height level, omitting the non-configurable reference height")
-      I.ref<-grep(".*ref*",colnames(u)[I.h])
+      I.ref<-grep(".*refh.*",colnames(u)[I.h])
       hg<-subset(u,select=I.h)
       hg<-subset(hg,select=-I.ref)
       df_h<-cbind(t.vec,hg)
       df_h$h<-h
-      names(df_h)<-c("time","dir","h")
+      names(df_h)<-c("time","u","h")
     }
     df_h<-df_h[stats::complete.cases(df_h),]
     return(df_h)

@@ -41,6 +41,18 @@ sp::coordinates(df.hkz)<-~lat+lon
 raster::crs(df.hkz)<-crs.hkz
 df.hkz<-sp::spTransform(df.hkz,sp::CRS("+init=epsg:4326"))
 
+#HKW epsg 32631? or 25831
+HKWA<-c(name="HKWA",lat=5824700,lon=548500)
+HKWB<-c(name="HKWB",lat=5824700,lon=550000)
+HKWC<-c(name="HKWC",lat=5824200,lon=549800)
+crs.hkw<-sp::CRS("+init=epsg:32631")
+df.hkw<-data.frame(rbind(HKWA,HKWB,HKWC))
+df.hkw$lat<-as.numeric(as.character(df.hkw$lat))
+df.hkw$lon<-as.numeric(as.character(df.hkw$lon))
+sp::coordinates(df.hkw)<-~lon+lat
+raster::crs(df.hkw)<-crs.hkw
+df.hkw<-sp::spTransform(df.hkw,sp::CRS("+init=epsg:4326"))
+
 #standard WGS84 coordinates
 Cabauw<-c(name="Cabauw",lat=51.971,lon=4.927)
 ANH<-c(name="ANH",lat=56.59566389,lon=11.15277778)
@@ -65,7 +77,7 @@ df.lidar$lon<-as.numeric(as.character(df.lidar$lon))
 sp::coordinates(df.lidar)<-~lon+lat
 raster::crs(df.lidar)<-sp::CRS("+init=epsg:4326")
 
-df.lidar<-rbind(df.lidar,df.hkz,df.hkn)
+df.lidar<-rbind(df.lidar,df.hkz,df.hkn,df.hkw)
 sf_lidar<-sf::st_as_sf(df.lidar)
 
 return(sf_lidar)

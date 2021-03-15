@@ -1,0 +1,43 @@
+default:
+  pro : !expr CRS("+init=epsg:28992") #you need the config package and: config::get(file="config/config.yml")
+  WGS84: !expr CRS("+init=epsg:4326")
+  bwfz1_dir: "D:/data/Lidar/BWFZ/Location1/"
+  bwfz2_dir: "D:/data/Lidar/BWFZ/Location2/"
+  epl_dir: "D:/data/Lidar/EPL/"
+  leg_dir: "D:/data/Lidar/LEG/"
+  anh_dir: "D:/data/Lidar/ANH/"
+  fino_dir: "D:/data/Lidar/"
+  hkn_dir: "D:/data/Lidar/HKN/"
+  hkz_dir: "D:/data/Lidar/HKZ/"
+  hkw_dir: "D:/data/Lidar/HKW/"
+  tnw_dir: "D:/data/Lidar/TNW/"
+  wmr_dir: "D:/data/Lidar/WMR/"
+  steven_dir: "D:/data/Lidar/Steven/"
+  internal_dir_KNMI: "info.knmi.nl/~knoop/"
+height_levels:
+  h_BWFZ: !expr c(4,30,40,60,80,100,120,140,160,180,200)
+  h_BSA1: !expr c(59,84,112,121,143,168,194,205,225,245,295)
+  h_BSA2: !expr c(60,84,109,118,140,165,191,202,225,245,295)
+  h_ANH: !expr c(40,60,76,80,100,116,160,200,250,290)
+  h_Daarle: !expr c(50,65,80,100,126,135,145,155,180,200,220,235)
+  h_Daarle_JA: !expr c(59,84,112,121,143,168,194,205,225,245,295)
+  h_Daarle_S: !expr c(60,84,109,118,140,165,191,202,225,245,295)
+  h_EPL: !expr c(63,91,116,141,166,191,216,241,266,291)
+  h_FINO1: !expr c(41,51,61,71,81,91)
+  h2_FINO1: !expr c(42,62,82)
+  h_FINO2: !expr c(32,42,52,62,72,82,92)
+  h2_FINO2: !expr c(31,51,71,91)
+  h_FINO3: !expr c(51,71,91)
+  h_HKN: !expr c(4,30,40,60,80,100,120,140,160,180,200)
+  h_HKZ: !expr c(4,30,40,60,80,100,120,140,160,180,200)
+  h_HKW: !expr c(4,30,40,60,80,100,120,140,160,180,200,250)
+  h_LEG: !expr c(63,91,116,141,166,191,216,241,266,291)
+  h_TNW: !expr c(4,30,40,60,80,100,120,140,160,180,200,250)
+  h_WMR: !expr c(4,30,40,60,80,100,120,140,160,180,200,290)
+  h_eems: !expr c(42,58,71,84,96,109,121,133,146,158,183,200)
+height_definition:
+  LAT: !expr c("MMIJ","HKN","HKZ","BWFZ")
+  MSL: !expr c("EPL","LEG","K13a")
+mounting_procedure:
+  platform: !expr c("MMIJ","EPL","LEG","K13a")
+  floating: !expr c("HKN","HKZ","BWFZ")

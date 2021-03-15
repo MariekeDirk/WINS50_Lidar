@@ -73,6 +73,7 @@ kinematic_heat_flux<-function(Ta,p,reh,H,LE){
   lv=2.5*10^6 #latent heat of vaporization J/Kg
   Rv=461.5 #J K kg-1
   T0=273.15 #K
+  rho=1.225 #air density at the surface as constant [kg/m3]
 
   kd=(cp-cv)/cp
   es=es0*exp((lv/Rv)*(1/T0-1/Ta))
@@ -81,7 +82,7 @@ kinematic_heat_flux<-function(Ta,p,reh,H,LE){
   q=0.662*(e/p) #specific humidity
 
 wtheta=H/(rho*cp) #(K m s-1)
-wq=LE/(rho*Lv) #(kg kg-1 m s-1)
+wq=LE/(rho*lv) #(kg kg-1 m s-1)
 
 khf<-wtheta*(1+0.61*q)+0.61*wq
 return(khf)
@@ -146,4 +147,22 @@ obukhov<-function(z,Ta,p,reh,tauu,tauv,H,LE){
   return(OL)
 
 
+}
+
+#'Richardson Gradient number
+#'@description Linear approximation of the richardson gradient number for a height difference z
+#'@param z height levels corresponding to the model/measurement levels of thetav,u,v.
+#'@param thetav virtual potential temperature
+#'@param u wind speed eastward
+#'@param v wind speed southward
+#'@param g gravitational constant
+#'@export
+Ri_grad<-function(thetav,u,v,z,g=9.81){
+  thetav_avr<-mean(thetav)
+  dtheta_dz <- mean(diff(thetav)/diff(z))
+  dv_dz<-mean(diff(v)/diff(z))
+  du_dz<-mean(diff(u)/diff(z))
+
+  Ri <- (g/thetav_avr*dtheta_dz)/(du_dz^2+dv_dz^2)
+  return(Ri)
 }
